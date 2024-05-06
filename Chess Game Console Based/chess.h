@@ -57,6 +57,9 @@ public:
 
     //bool is_legal(however they want to move);
     bool legal_move(const Board* b, const Move* m);
+
+    // _do_move()
+    static bool _do_move(const Board* b, const Move* m);
 };
 
 
@@ -89,7 +92,7 @@ public:
     //bool is_legal(however they want to move);
     bool legal_move(const Board* b, const Move* m);
 
-    bool _do_move(const Board* b, const Move* m);
+    static bool _do_move(const Board* b, const Move* m);
 };
 
 class Queen : public Piece {

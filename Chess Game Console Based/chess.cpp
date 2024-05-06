@@ -151,7 +151,7 @@ void Board::do_move(Move* m) {
 
     // h7 - make sure to delete a piece if being removed
     if (b[to_i].p != NULL)
-        delete b[to_i].p;
+        //delete b[to_i].p;
 
     // put piece from from_i to to_i
     b[to_i].p = b[from_i].p;
@@ -234,6 +234,12 @@ bool Bishop::legal_move(const Board* b, const Move* m) {
         abs(m->from.rank - m->to.rank)) return false;
 
     // my code from here
+    return Bishop::_do_move(b, m);
+}
+
+// implementation of Bishop legal move
+bool Bishop::_do_move(const Board* b, const Move* m)
+{
     // Now, the col or row to be moved is correct.
     // We will check if there is any other piece in the path or not
     // if there is a piece in the path and its not the same colour
@@ -466,8 +472,6 @@ bool Bishop::legal_move(const Board* b, const Move* m) {
             return false;
         }
     }
-
-    return true;
 }
 
 // h6 - add legal_move methods for: rook, king, queen, knight
@@ -496,7 +500,7 @@ bool Rook::_do_move(const Board* b, const Move* m)
     // checking for any piece in the path    
     if (m->from.file == m->to.file)
     {
-        // if rook is moving in col direction
+        // if rook is moving in col direction (vertically)
         int r = 0;
         switch (m->from.rank)
         {
@@ -637,7 +641,7 @@ bool Rook::_do_move(const Board* b, const Move* m)
     }
     else if (m->from.rank == m->to.rank)
     {
-        // if rook is moving in row direction
+        // if rook is moving in row direction (horizontally)
         int r = 0;
         switch (m->from.rank)
         {
@@ -808,8 +812,31 @@ bool Queen::legal_move(const Board* b, const Move* m) {
     // Bishop and Rook
     // We just need to call those functions with proper params to execute them as queen
 
-
-    return true;
+    // check in which direction queen is moving and then call the exact method
+    if (m->from.file == m->to.file)
+    {
+        // if queen is moving upwards (vertically)
+        // it means queen is moving like a Rook
+        return Rook::_do_move(b, m);
+    }
+    else if (m->from.rank == m->to.rank)
+    {
+        // if queen is moving rowwise horizontally 
+        // it means queen is moving like a Rook
+        return Rook::_do_move(b, m);
+    }
+    else if (m->from.rank < m->to.rank)
+    {
+        // if queen is moving upwards (diagonally)
+        // it means queen is moving like a Bishop
+        return Bishop::_do_move(b, m);
+    }
+    else if (m->from.rank > m->to.rank)
+    {
+        // if queen is moving downwards (diagonally)
+        // it means queen is moving like a Bishop
+        return Bishop::_do_move(b, m);
+    }
 }
 
 bool Knight::legal_move(const Board* b, const Move* m) {
